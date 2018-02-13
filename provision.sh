@@ -1,9 +1,9 @@
 #!/bin/bash -e
 
+set -x
+
 TYPE=$1                 # "manager" or "worker"
 LEADER_IP_ADDRESS=$2    # ip address of first manager
-
-JOIN_SCRIPT=/tmp/join.sh
 
 # Ensure docker is installed
 if ! which docker 2> /dev/null ; then
@@ -23,7 +23,7 @@ cp /vagrant/id_rsa ~/.ssh/id_rsa
 chmod 400 ~/.ssh/id_rsa
 
 # Ensure that we are not already in a swarm
-docker swarm leave --force || true
+docker swarm leave --force > /dev/null 2>&1 || true
 
 if (ip addr | grep "inet ${LEADER_IP_ADDRESS}" > /dev/null) ; then
     # Steps for the leader manager
@@ -35,18 +35,14 @@ if (ip addr | grep "inet ${LEADER_IP_ADDRESS}" > /dev/null) ; then
     systemctl reload sshd
 
     # Initialize a swarm and save the command line to be used by other nodes
-    docker swarm init --advertise-addr $LEADER_IP_ADDRESS | \
-        sed -n '/^  */p;s/^  *//' > $JOIN_SCRIPT
-    cat $JOIN_SCRIPT
-elif [ "$1" == "manager" ] ; then
-    # Steps for other managers
-
-    echo "Non-leader managers cannot be provisioned, for the time being." >&2
-    false
+    docker swarm init --advertise-addr $LEADER_IP_ADDRESS
 else
-    # Steps for workers
+    # Steps for other managers and workers
 
-    # Join the swarm as a worker
-    scp -o StrictHostKeyChecking=no $LEADER_IP_ADDRESS:$JOIN_SCRIPT $JOIN_SCRIPT
-    . $JOIN_SCRIPT
+    # Join the swarm
+    #ssh -o StrictHostKeyChecking=no $LEADER_IP_ADDRESS docker swarm join-token $TYPE | \
+    #    sed -n '/^  */p;s/^  *//' | sh
+    ssh -o StrictHostKeyChecking=no $LEADER_IP_ADDRESS docker swarm join-token $TYPE | \
+        sed -n '/^  */p;s/^  *//' > /tmp/join.sh
+    . /tmp/join.sh
 fi
