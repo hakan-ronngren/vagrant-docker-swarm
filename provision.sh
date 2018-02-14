@@ -1,7 +1,5 @@
 #!/bin/bash -e
 
-set -x
-
 TYPE=$1                 # "manager" or "worker"
 LEADER_IP_ADDRESS=$2    # ip address of first manager
 
@@ -13,6 +11,7 @@ fi
 # Ensure docker is started
 if ! systemctl status docker > /dev/null 2>&1 ; then
     systemctl start docker
+    systemctl enable docker
 fi
 
 # Ensure that there is a .ssh directory in root home

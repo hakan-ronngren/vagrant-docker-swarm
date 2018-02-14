@@ -9,8 +9,6 @@ HostInfos = [
     {name: "host-2", manager?: true,  ip_address: "192.168.99.102"},
     {name: "host-3", manager?: true,  ip_address: "192.168.99.103"},
     {name: "host-4", manager?: false, ip_address: "192.168.99.104"},
-    {name: "host-5", manager?: false, ip_address: "192.168.99.105"},
-    {name: "host-6", manager?: false, ip_address: "192.168.99.106"},
 ]
 
 unless HostInfos.first[:manager?]
@@ -30,23 +28,24 @@ LeaderIpAddress = HostInfos.select {|hi| hi[:manager?]}.first[:ip_address]
 Vagrant.configure("2") do |config|
 
     config.vm.box = "centos/7"
-    if `vagrant --version`.split(' ').last.split('.').first.to_i <= 1
+    if Vagrant::VERSION.split('.').first.to_i <= 1
         config.vm.box_url = "http://cloud.centos.org/centos/7/vagrant/x86_64/images/" +
                             "CentOS-7-x86_64-Vagrant-1801_02.VirtualBox.box"
     else
         config.vm.box_version = "1801.02"
     end
 
-    config.vm.provider "virtualbox" do |vb|
+    config.vm.provider :virtualbox do |vb|
         vb.memory = "512"
     end
 
     HostInfos.each do |host_info|
         config.vm.define(host_info[:name]) do |host|
+            host.vm.hostname = host_info[:name]
     
             # Create a private network, which allows host-only access to the machine
             # using a specific IP.
-            host.vm.network "private_network", ip: host_info[:ip_address]
+            host.vm.network :private_network, ip: host_info[:ip_address]
 
             type = (host_info[:manager?] ? "manager" : "worker")
             host.vm.provision "shell", 
@@ -54,16 +53,4 @@ Vagrant.configure("2") do |config|
                 args: "#{type} #{LeaderIpAddress}"
         end
     end
-
-    # Create a forwarded port mapping which allows access to a specific port
-    # within the machine from a port on the host machine. In the example below,
-    # accessing "localhost:8080" will access port 80 on the guest machine.
-    # NOTE: This will enable public access to the opened port
-    # config.vm.network "forwarded_port", guest: 80, host: 8080
-
-    # Create a forwarded port mapping which allows access to a specific port
-    # within the machine from a port on the host machine and only allow access
-    # via 127.0.0.1 to disable public access
-    # config.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
-
 end
