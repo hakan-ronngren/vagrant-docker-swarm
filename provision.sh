@@ -8,10 +8,14 @@ if ! which docker 2> /dev/null ; then
     yum install -y docker
 fi
 
-# Ensure docker is started
-if ! systemctl status docker > /dev/null 2>&1 ; then
-    systemctl start docker
+# Ensure docker is enabled for autostart
+if ! systemctl is-enabled docker > /dev/null 2>&1 ; then
     systemctl enable docker
+fi
+
+# Ensure docker is started
+if ! systemctl is-active docker > /dev/null 2>&1 ; then
+    systemctl start docker
 fi
 
 # Ensure that there is a .ssh directory in root home
@@ -22,6 +26,7 @@ cp /vagrant/id_rsa ~/.ssh/id_rsa
 chmod 400 ~/.ssh/id_rsa
 
 # Ensure that we are not already in a swarm
+# TODO: find a reliable way of determining if we are in a swarm
 docker swarm leave --force > /dev/null 2>&1 || true
 
 if (ip addr | grep "inet ${LEADER_IP_ADDRESS}" > /dev/null) ; then
