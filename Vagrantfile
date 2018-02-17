@@ -39,7 +39,7 @@ Vagrant.configure("2") do |config|
         vb.memory = "512"
     end
 
-    HostInfos.each do |host_info|
+    HostInfos.each_with_index do |host_info, ix|
         config.vm.define(host_info[:name]) do |host|
             host.vm.hostname = host_info[:name]
     
@@ -50,7 +50,7 @@ Vagrant.configure("2") do |config|
             type = (host_info[:manager?] ? "manager" : "worker")
             host.vm.provision "shell", 
                 path: "provision.sh", 
-                args: "#{type} #{LeaderIpAddress}"
+                args: "#{type} #{LeaderIpAddress} #{ix + 1}"
         end
     end
 end
