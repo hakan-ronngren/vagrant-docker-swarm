@@ -17,7 +17,7 @@ There is a script that you can use to monitor what is going on. Run it on a mana
 vagrant ssh host-1 -c "/vagrant/monitor.sh"
 ```
 
-Alternatively, you can start the Portainer application. It must also run on a manager host:
+Alternatively, you can start the [Portainer](https://portainer.io/) application. It must also run on a manager host:
 
 ```bash
 vagrant ssh host-1 -c "/vagrant/start-portainer.sh"
