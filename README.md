@@ -22,3 +22,4 @@ Alternatively, you can start the Portainer application. It must also run on a ma
 ```bash
 vagrant ssh host-1 -c "/vagrant/start-portainer.sh"
 ```
+If you start it on `host-1`, it will be accessible on http://192.168.99.101:9000/
