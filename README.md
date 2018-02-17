@@ -2,7 +2,7 @@
 
 This project uses [Vagrant](https://www.vagrantup.com/) to set up a number of virtual machines using [VirtualBox](https://www.virtualbox.org/), create a [Docker swarm](https://docs.docker.com/engine/swarm/) and deploy a service consisting of a very simple web application that reveals the identity of the container host that rendered the page.
 
-Start the cluster like this:
+Having installed Vagrant and VirtualBox, you start the cluster like this:
 
 ```bash
 vagrant up
