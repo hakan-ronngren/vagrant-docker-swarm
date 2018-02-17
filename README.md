@@ -1,8 +1,14 @@
 # vagrant-docker-swarm
 
-This project sets up a number of virtual machines using [VirtualBox](https://www.virtualbox.org/), sets up a [Docker swarm](https://docs.docker.com/engine/swarm/) and deploys a service consisting of a very simple web application that reveals the identity of the container host that rendered the page.
+This project uses [Vagrant](https://www.vagrantup.com/) to set up a number of virtual machines using [VirtualBox](https://www.virtualbox.org/), create a [Docker swarm](https://docs.docker.com/engine/swarm/) and deploy a service consisting of a very simple web application that reveals the identity of the container host that rendered the page.
 
-Being deployed in a swarm, the application loads equivalently from any of the involved hosts:
+Start the cluster like this:
+
+```bash
+vagrant up
+```
+
+Being deployed in a swarm, the application will then load equivalently from any of the involved hosts:
 
 - http://192.168.99.101:8080/
 - http://192.168.99.102:8080/
