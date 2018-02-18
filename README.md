@@ -10,9 +10,9 @@ vagrant up
 
 Being deployed in a swarm, the application will then load equivalently from any of the involved hosts:
 
-- http://192.168.99.101:8080/
-- http://192.168.99.102:8080/
-- http://192.168.99.103:8080/
+- http://192.168.100.100:8080/
+- http://192.168.100.101:8080/
+- http://192.168.100.102:8080/
 - ...
 
 ## Visualizing the swarm
@@ -28,4 +28,4 @@ Alternatively, you can start the [Portainer](https://portainer.io/) application.
 ```bash
 vagrant ssh host-1 -c "/vagrant/start-portainer.sh"
 ```
-If you start it on `host-1`, it will be accessible on http://192.168.99.101:9000/
+If you start it on `host-1`, it will be accessible on http://192.168.100.100:9000/

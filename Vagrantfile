@@ -5,10 +5,10 @@ require 'openssl'
 require 'net/ssh'
 
 HostInfos = [
-    {name: "host-1", manager?: true,  ip_address: "192.168.99.101"},
-    {name: "host-2", manager?: true,  ip_address: "192.168.99.102"},
-    {name: "host-3", manager?: true,  ip_address: "192.168.99.103"},
-    {name: "host-4", manager?: false, ip_address: "192.168.99.104"},
+    {name: "host-1", manager?: true,  ip_address: "192.168.100.100"},
+    {name: "host-2", manager?: true,  ip_address: "192.168.100.101"},
+    {name: "host-3", manager?: true,  ip_address: "192.168.100.102"},
+    {name: "host-4", manager?: false, ip_address: "192.168.100.103"},
 ]
 
 unless HostInfos.first[:manager?]
